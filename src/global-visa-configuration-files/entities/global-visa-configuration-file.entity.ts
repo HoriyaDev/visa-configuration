@@ -8,7 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { GlobalVisaConfiguration } from 'src/global-visa-configuration/entities/global-visa-configuration.entity';
+import { GlobalVisaConfiguration } from '../../global-visa-configuration/entities/global-visa-configuration.entity';
 
 @Entity('global_visa_configuration_files')
 export class GlobalVisaConfigurationFile {
@@ -36,14 +36,17 @@ export class GlobalVisaConfigurationFile {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @DeleteDateColumn({ nullable: true }) 
+  @DeleteDateColumn({ nullable: true })
   deleted_at: Date;
+
+  @Column({ nullable: false })
+  global_visa_configuration_id: number;
 
   @ManyToOne(
     () => GlobalVisaConfiguration,
     (visaConfiguration) => visaConfiguration.files,
-    { onDelete: 'CASCADE' } 
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'global_visa_configuration_id' })
-  globalVisaConfiguration: GlobalVisaConfiguration; 
+  globalVisaConfiguration: GlobalVisaConfiguration;
 }

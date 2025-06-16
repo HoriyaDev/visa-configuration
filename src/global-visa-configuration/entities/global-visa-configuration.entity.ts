@@ -8,14 +8,14 @@ import {
   OneToMany
 } from 'typeorm';
 
-import { GlobalVisaConfigurationFile } from 'src/global-visa-configuration-files/entities/global-visa-configuration-file.entity';
+import { GlobalVisaConfigurationFile } from '../../global-visa-configuration-files/entities/global-visa-configuration-file.entity';
 
 @Entity('global_visa_configurations')
 export class GlobalVisaConfiguration {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: false })
   name: string;
 
   @Column({ type: 'text' })

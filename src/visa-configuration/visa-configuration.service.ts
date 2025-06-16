@@ -40,10 +40,10 @@ export class VisaConfigurationService {
       throw new NotFoundException('Not Found');
     }
 
-    // Remove unwanted fields
+ 
     const { id, created_at, updated_at, deleted_at, files, ...rest } = globalVisa;
 
-    // Create new visa config based on global data
+    
     const visa = this.visaConfigRepo.create({
       ...rest,
       agent_id: agentId,
@@ -52,7 +52,7 @@ export class VisaConfigurationService {
 
     const savedVisa = await this.visaConfigRepo.save(visa);
 
-    // Copy attached files if present
+   
     if (files && files.length > 0) {
       const visaFiles = files.map(file => {
         return this.visaConfigFilesRepo.create({
@@ -61,14 +61,14 @@ export class VisaConfigurationService {
           file_type: file.file_type,
           display_name: file.display_name,
           is_active: true,
-          visaConfiguration: savedVisa, // establish relation
+          visaConfiguration: savedVisa, 
         });
       });
 
       await this.visaConfigFilesRepo.save(visaFiles);
     }
 
-    // Return saved visa with files
+    
     return this.visaConfigRepo.findOne({
       where: { id: savedVisa.id },
       relations: ['files'],

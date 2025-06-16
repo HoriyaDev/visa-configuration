@@ -17,7 +17,9 @@ export class GlobalVisaConfigurationService {
   }
 
  async findAll() {
-    return  await this.globalVisaConfigRepo.find();
+    return  await this.globalVisaConfigRepo.find({
+      relations:['files']
+    });
   }
 
   async findOne(id: number) {
