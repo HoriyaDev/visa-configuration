@@ -5,15 +5,12 @@ import {
   IsOptional,
 } from 'class-validator';
 
-export class CreateVisaConfigurationDto {
+export class CreateGlobalVisaConfigurationDto {
   @IsString()
   name: string;
 
   @IsString()
   description: string;
-
-  @IsNumber()
-  agent_id: number;
 
   @IsNumber()
   destination_country_id: number;

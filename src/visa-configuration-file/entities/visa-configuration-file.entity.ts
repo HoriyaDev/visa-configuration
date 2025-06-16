@@ -1,4 +1,4 @@
-// src/entity/VisaConfigurationFile.ts (Ya aapki file ka naam)
+
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,13 +6,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToOne, // <--- Isse import karein
-  JoinColumn, // <--- Isse import karein (optional magar wazahat ke liye acha)
+  ManyToOne, 
+  JoinColumn, 
 } from 'typeorm';
 
 import { VisaConfiguration } from 'src/visa-configuration/entities/visa-configuration.entity';
 
-@Entity('global_visa_configuration_files')
+@Entity('visa_configuration_files')
 export class VisaConfigurationFile {
   @PrimaryGeneratedColumn()
   id: number;
@@ -45,6 +45,10 @@ export class VisaConfigurationFile {
     () => VisaConfiguration,
     (visaConfiguration) => visaConfiguration.files
   )
-  @JoinColumn({ name: 'global_visa_configuration_id' })
+  @JoinColumn({ name: 'visa_configuration_id' })
   visaConfiguration: VisaConfiguration; 
+
+
+
+
 }

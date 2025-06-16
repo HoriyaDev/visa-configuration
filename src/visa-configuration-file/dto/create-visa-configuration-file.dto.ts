@@ -23,5 +23,5 @@ export class CreateVisaConfigurationFileDto {
   is_active?: boolean;
 
   @IsNumber()
-  global_visa_configuration_id: number;
+  visa_configuration_id: number;
 }

@@ -5,13 +5,20 @@ import { UpdateVisaConfigurationDto } from './dto/update-visa-configuration.dto'
 
 @Controller('visa-configuration')
 export class VisaConfigurationController {
-  constructor(private readonly visaConfigurationService: VisaConfigurationService) {}
+  constructor(private  visaConfigurationService: VisaConfigurationService) {}
 
   @Post()
   create(@Body() createVisaConfigurationDto: CreateVisaConfigurationDto) {
     return this.visaConfigurationService.create(createVisaConfigurationDto);
   }
+  
 
+
+
+  @Post('import/:agentId')
+importVisaConfig(@Param('agentId') agentId: number) {
+  return this.visaConfigurationService.importFromGlobal(agentId);
+}
   @Get()
   findAll() {
     return this.visaConfigurationService.findAll();

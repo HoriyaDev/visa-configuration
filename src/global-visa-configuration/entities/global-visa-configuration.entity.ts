@@ -8,17 +8,15 @@ import {
   OneToMany
 } from 'typeorm';
 
-import { VisaConfigurationFile } from 'src/visa-configuration-file/entities/visa-configuration-file.entity';
+import { GlobalVisaConfigurationFile } from 'src/global-visa-configuration-files/entities/global-visa-configuration-file.entity';
 
-@Entity('visa_configurations')
-export class VisaConfiguration {
+@Entity('global_visa_configurations')
+export class GlobalVisaConfiguration {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
-  @Column()
-  agent_id:number;
 
   @Column({ type: 'text' })
   description: string;
@@ -68,18 +66,13 @@ export class VisaConfiguration {
   @DeleteDateColumn()
   deleted_at: Date;
 
-
-
- @OneToMany(
-    () => VisaConfigurationFile,
-    (visaConfigurationFile) => visaConfigurationFile.visaConfiguration,
+  @OneToMany(
+    () => GlobalVisaConfigurationFile,
+    (visaConfigurationFile) => visaConfigurationFile.globalVisaConfiguration,
     { cascade: true, eager: false }
   )
-  files: VisaConfigurationFile[];
-
-
+  files: GlobalVisaConfigurationFile[];
 }
-
 
 
 
