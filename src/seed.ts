@@ -17,7 +17,7 @@ async function seed() {
 
   const configurationsToSeed = [
     {
-      name: 'study visa',
+      name: 'tourist visa',
       description: 'For higher education students',
       destination_country_id: 1,
       entry_id: 1,
@@ -50,27 +50,20 @@ async function seed() {
     },
   ];
 
-  const savedVisa: GlobalVisaConfiguration[] = [];
+  const visaMap: Record<string, GlobalVisaConfiguration> = {};
 
-  for (const configData of configurationsToSeed) {
-    const existing = await globalVisaRepo.findOne({
-      where: { name: configData.name },
-    });
 
+  for (const config of configurationsToSeed) {
+    const existing = await globalVisaRepo.findOne({ where: { name: config.name } });
     if (!existing) {
-      const newVisa = globalVisaRepo.create(configData);
-      const saveVisa = await globalVisaRepo.save(newVisa);
-      savedVisa.push(saveVisa);
+      const newVisa = globalVisaRepo.create(config);
+      const saved = await globalVisaRepo.save(newVisa);
+      visaMap[config.name] = saved;
+      console.log(`✅ Created visa configuration: ${config.name}`);
+    } else {
+      visaMap[config.name] = existing;
+      console.log(`ℹ️  Visa configuration already exists: ${config.name}`);
     }
-  }
-
-  
-  const savedVisa1 = savedVisa.find(visa => visa.name === 'study visa');
-  const savedVisa2 = savedVisa.find(visa => visa.name === 'work visa');
-
-  if (!savedVisa1 || !savedVisa2) {
-    console.error('❌ Visa records not found.');
-    return;
   }
 
   const filesToSeed = [
@@ -80,7 +73,7 @@ async function seed() {
       file_type: 'application/pdf',
       display_name: 'University Letter',
       is_active: true,
-      global_visa_configuration_id: savedVisa1.id,
+      visa_name: 'tourist visa',
     },
     {
       file_name: 'passport_copy.pdf',
@@ -88,7 +81,7 @@ async function seed() {
       file_type: 'application/pdf',
       display_name: 'Passport Copy',
       is_active: true,
-      global_visa_configuration_id: savedVisa1.id,
+      visa_name: 'tourist visa',
     },
     {
       file_name: 'job_offer.pdf',
@@ -96,22 +89,34 @@ async function seed() {
       file_type: 'application/pdf',
       display_name: 'Job Offer',
       is_active: true,
-      global_visa_configuration_id: savedVisa2.id,
+      visa_name: 'work visa',
     },
   ];
 
+  // Seed visa configuration files
   for (const file of filesToSeed) {
+    const visa = visaMap[file.visa_name];
+    if (!visa) {
+      console.log(`⚠️  Skipping file ${file.file_name} - visa configuration not found: ${file.visa_name}`);
+      continue;
+    }
+
     const existing = await globalVisaFileRepo.findOne({
       where: {
         file_name: file.file_name,
-        global_visa_configuration_id: file.global_visa_configuration_id,
+        global_visa_configuration_id: visa.id,
       },
     });
 
     if (!existing) {
-      const newFile = globalVisaFileRepo.create(file);
+      const newFile = globalVisaFileRepo.create({
+        ...file,
+        global_visa_configuration_id: visa.id,
+      });
       await globalVisaFileRepo.save(newFile);
-     
+      console.log(`✅ Created file: ${file.file_name} for ${file.visa_name}`);
+    } else {
+      console.log(`ℹ️  File already exists: ${file.file_name} for ${file.visa_name}`);
     }
   }
 

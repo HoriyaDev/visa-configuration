@@ -73,6 +73,3 @@ export class GlobalVisaConfiguration {
   )
   files: GlobalVisaConfigurationFile[];
 }
-
-
-

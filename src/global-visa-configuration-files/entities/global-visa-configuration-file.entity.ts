@@ -6,8 +6,9 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  JoinColumn,
+  JoinColumn
 } from 'typeorm';
+
 import { GlobalVisaConfiguration } from '../../global-visa-configuration/entities/global-visa-configuration.entity';
 
 @Entity('global_visa_configuration_files')
@@ -30,21 +31,21 @@ export class GlobalVisaConfigurationFile {
   @Column({ default: true })
   is_active: boolean;
 
+  @Column()
+  global_visa_configuration_id: number;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
 
-  @DeleteDateColumn({ nullable: true })
+  @DeleteDateColumn()
   deleted_at: Date;
-
-  @Column({ nullable: false })
-  global_visa_configuration_id: number;
 
   @ManyToOne(
     () => GlobalVisaConfiguration,
-    (visaConfiguration) => visaConfiguration.files,
+    (globalVisaConfiguration) => globalVisaConfiguration.files,
     { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'global_visa_configuration_id' })
