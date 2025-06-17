@@ -17,6 +17,11 @@ export class GlobalVisaConfigurationController {
     return this.globalVisaConfigurationService.findAll();
   }
 
+  @Get('countries')
+  handleCountries() {
+    // Ye kabhi call nahi hoga agar middleware return kar raha hai
+    return { message: 'This should not appear if middleware handled it' };
+  }
   @Get(':id')
   findOne(@Param('id') id:number) {
     return this.globalVisaConfigurationService.findOne(id);
